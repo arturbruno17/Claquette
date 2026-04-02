@@ -1,0 +1,110 @@
+{
+  "fill" : {
+    "solid" : "extended-gray:1.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "blur-material" : 0.5,
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill" : "automatic",
+          "glass" : false,
+          "image-name" : "foreground_colorful.svg",
+          "name" : "foreground_colorful_layer_4",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -6.439615048205496,
+              -258.41195528825364
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          0,
+          0
+        ]
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "foreground_lines.svg",
+          "name" : "foreground_lines_layer_3",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              8.31138495179448,
+              143.08904471174628
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "foreground_black.svg",
+          "name" : "foreground_black_layer_2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              8.31138495179448,
+              -78.91095528825366
+            ]
+          }
+        },
+        {
+          "blend-mode" : "darken",
+          "fill" : "automatic",
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "foreground_information.svg",
+          "name" : "foreground_information_layer_1",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              8.31138495179448,
+              177.08904471174628
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          0,
+          0
+        ]
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
