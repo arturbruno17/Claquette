@@ -12,13 +12,19 @@ class TabViewController: UITabBarController {
     init() {
         super.init(nibName: nil, bundle: nil)
 
-        let homeVC = UIViewController()
-        homeVC.view.backgroundColor = .systemBackground
-        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), selectedImage: nil)
+        let homeVC = HomeViewController()
+        homeVC.tabBarItem = UITabBarItem(
+            title: "Home",
+            image: .init(systemName: "house"),
+            selectedImage: nil
+        )
 
         let searchVC = UIViewController()
-        searchVC.view.backgroundColor = .systemBackground
-        searchVC.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), selectedImage: nil)
+        searchVC.tabBarItem = UITabBarItem(
+            title: "Search",
+            image: .init(systemName: "magnifyingglass"),
+            selectedImage: nil
+        )
 
         // Optionally wrap in navigation controllers
         viewControllers = [homeVC, searchVC]
