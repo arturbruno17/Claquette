@@ -8,9 +8,7 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-
-    private let gradientLayer = CAGradientLayer()
-
+    
     let bannerView: BannerView = {
         let bannerView = BannerView()
         bannerView.configure(
@@ -31,12 +29,30 @@ class HomeViewController: UIViewController {
         return pageControl
     }()
     
+    lazy var otherTitlesCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: Self.createHomeListLayout())
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(
+            TitleCollectionViewCell.self,
+            forCellWithReuseIdentifier: TitleCollectionViewCell.identifier
+        )
+        collectionView.register(
+            GenreSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "GenreSectionHeaderView"
+        )
+        return collectionView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(bannerView)
         view.addSubview(pageControl)
-
+        view.addSubview(otherTitlesCollectionView)
+        
         setupConstraints()
     }
     
@@ -50,6 +66,12 @@ class HomeViewController: UIViewController {
         NSLayoutConstraint.activate([
             pageControl.centerXAnchor.constraint(equalTo: bannerView.centerXAnchor),
             pageControl.bottomAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: -10),
+        ])
+        NSLayoutConstraint.activate([
+            otherTitlesCollectionView.topAnchor.constraint(equalTo: bannerView.bottomAnchor, constant: 20),
+            otherTitlesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            otherTitlesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            otherTitlesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
