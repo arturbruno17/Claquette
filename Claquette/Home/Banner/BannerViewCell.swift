@@ -7,18 +7,34 @@
 
 import UIKit
 
-class BannerView: UIView {
+class BannerViewCell: UICollectionViewCell {
     
-    var title: String = "" {
-        didSet { titleView.text = title }
-    }
+    static let identifier = "BannerViewCell"
     
-    var genres: [String] = [] {
-        didSet { genresView.text = genres.joined(separator: ", ") }
-    }
+    var imageDownloadTask: Task<Void, Never>? = nil
     
-    var releaseYear: String = "" {
-        didSet { releaseYearView.text = releaseYear }
+    var imageUrl: String = "" {
+        didSet {
+            guard let imageUrl = URL(string: imageUrl) else { return }
+            
+            imageDownloadTask?.cancel()
+            imageDownloadTask = Task(priority: .utility) {
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: imageUrl)
+                    
+                    try Task.checkCancellation()
+                    
+                    let decodedImage = await withCheckedContinuation { continuation in
+                        let image = UIImage(data: data)
+                        continuation.resume(returning: image)
+                    }
+                    guard let image = decodedImage else { return }
+                    await MainActor.run { self.imageView.image = image }
+                } catch {
+                    // Swallow cancellation and network errors silently for now
+                }
+            }
+        }
     }
     
     private let gradientLayer = CAGradientLayer()
@@ -27,12 +43,16 @@ class BannerView: UIView {
         let imageView = UIImageView(image: nil)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
+        imageView.image = .init(systemName: "photo")
+        imageView.image = .init(systemName: "photo")
+        imageView.tintColor = .secondaryLabel
+        imageView.backgroundColor = .clear
         imageView.clipsToBounds = true
         return imageView
     }()
     
     private let contentStack: UIStackView = {
-       let stackView = UIStackView()
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +63,8 @@ class BannerView: UIView {
         let label = UILabel()
         label.font = .init(name: UIFont.interBold, size: 24)
         label.textColor = .white
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -69,17 +91,8 @@ class BannerView: UIView {
         return label
     }()
     
-    var ageIndicationView: AgeIndicationView = .free {
-        willSet {
-            releaseYearAndAgeIndicationStack.removeArrangedSubview(ageIndicationView)
-        }
-        didSet {
-            releaseYearAndAgeIndicationStack.addArrangedSubview(ageIndicationView)
-        }
-    }
-    
-    init() {
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         setupViews()
         setupConstraints()
@@ -95,12 +108,27 @@ class BannerView: UIView {
         gradientLayer.frame = imageView.bounds
     }
     
-    func configure(image: UIImage, title: String, genres: [String], releaseYear: String, ageIndication: AgeIndicationView) {
-        self.title = title
-        self.genres = genres
-        self.releaseYear = releaseYear
-        self.ageIndicationView = ageIndication
-        self.imageView.image = image
+    override func prepareForReuse() {
+        imageView.image = nil
+        titleView.text = ""
+        genresView.text = ""
+        releaseYearView.text = ""
+
+        let oldView = releaseYearAndAgeIndicationStack.arrangedSubviews[1]
+        releaseYearAndAgeIndicationStack.removeArrangedSubview(oldView)
+        oldView.removeFromSuperview()
+    }
+    
+    func configure(imageUrl: String, title: String, genres: [String], releaseYear: String, ageIndication: AgeIndicationView) {
+        self.imageUrl = imageUrl
+        
+        titleView.text = title
+        
+        let genresToDisplay = genres.count > 3 ? Array(genres[0...2]) : genres
+        genresView.text = genresToDisplay.joined(separator: ", ")
+        
+        releaseYearView.text = releaseYear
+        releaseYearAndAgeIndicationStack.addArrangedSubview(ageIndication)
     }
     
     private func setupViews() {
@@ -110,7 +138,6 @@ class BannerView: UIView {
         contentStack.addArrangedSubview(genresView)
         contentStack.addArrangedSubview(releaseYearAndAgeIndicationStack)
         releaseYearAndAgeIndicationStack.addArrangedSubview(releaseYearView)
-        releaseYearAndAgeIndicationStack.addArrangedSubview(ageIndicationView)
     }
     
     private func setupConstraints() {
@@ -122,6 +149,7 @@ class BannerView: UIView {
         ])
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -44),
         ])
     }
@@ -133,8 +161,8 @@ class BannerView: UIView {
         ]
         gradientLayer.locations = [0.0, 0.63]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint   = CGPoint(x: 0.5, y: 1.0)
-
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        
         imageView.layer.insertSublayer(gradientLayer, at: 0)
     }
 }

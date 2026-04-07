@@ -39,10 +39,10 @@ class AgeIndicationView : UILabel {
 }
 
 extension AgeIndicationView {
-    static var free = AgeIndicationView(text: "L", backgroundColor: .ageIndicationFree)
-    static var a10 = AgeIndicationView(text: "10", backgroundColor: .ageIndication10)
-    static var a12 = AgeIndicationView(text: "12", backgroundColor: .ageIndication12)
-    static var a14 = AgeIndicationView(text: "14", backgroundColor: .ageIndication14)
-    static var a16 = AgeIndicationView(text: "16", backgroundColor: .ageIndication16)
-    static var a18 = AgeIndicationView(text: "18", backgroundColor: .ageIndication18)
+    static var free: AgeIndicationView { .init(text: "L", backgroundColor: .ageIndicationFree) }
+    static var a10: AgeIndicationView { .init(text: "10", backgroundColor: .ageIndication10) }
+    static var a12: AgeIndicationView { .init(text: "12", backgroundColor: .ageIndication12) }
+    static var a14: AgeIndicationView { .init(text: "14", backgroundColor: .ageIndication14) }
+    static var a16: AgeIndicationView { .init(text: "16", backgroundColor: .ageIndication16) }
+    static var a18: AgeIndicationView { .init(text: "18", backgroundColor: .ageIndication18) }
 }

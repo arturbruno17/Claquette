@@ -14,7 +14,7 @@ class GenreSectionHeaderView: UICollectionReusableView {
     private let stack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.distribution = .fill
+        stack.distribution = .equalSpacing
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
