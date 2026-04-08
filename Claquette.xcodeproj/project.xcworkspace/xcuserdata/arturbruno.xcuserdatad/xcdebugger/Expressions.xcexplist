@@ -3,6 +3,20 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "UIAsyncImage.url.didset:UIAsyncImage.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.placeholder.isHidden">
+            </PersistentString>
+            <PersistentString
+               value = "self.errorView.isHidden">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "BannerCarouselView.scrollViewWillEndDragging(_:withVelocity:targetContentOffset:):BannerCarouselView+UICollectionViewDelegateFlowLayout.swift">
+      </ContextState>
+      <ContextState
          contextName = "BannerViewCell.configure(imageUrl:title:genres:releaseYear:ageIndication:):BannerViewCell.swift">
          <PersistentStrings>
             <PersistentString
@@ -10,6 +24,23 @@
             </PersistentString>
             <PersistentString
                value = "releaseYearAndAgeIndicationStack.arrangedSubviews">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "UIAsyncImage.addAndConstraintView(_:representing:):UIAsyncImage.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "state.rawValue">
+            </PersistentString>
+            <PersistentString
+               value = "self.state.rawValue == state.rawValue">
+            </PersistentString>
+            <PersistentString
+               value = "self.state.rawValue">
+            </PersistentString>
+            <PersistentString
+               value = "self.state">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

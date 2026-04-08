@@ -11,44 +11,22 @@ class BannerViewCell: UICollectionViewCell {
     
     static let identifier = "BannerViewCell"
     
-    var imageDownloadTask: Task<Void, Never>? = nil
-    
-    var imageUrl: String = "" {
-        didSet {
-            guard let imageUrl = URL(string: imageUrl) else { return }
-            
-            imageDownloadTask?.cancel()
-            imageDownloadTask = Task(priority: .utility) {
-                do {
-                    let (data, _) = try await URLSession.shared.data(from: imageUrl)
-                    
-                    try Task.checkCancellation()
-                    
-                    let decodedImage = await withCheckedContinuation { continuation in
-                        let image = UIImage(data: data)
-                        continuation.resume(returning: image)
-                    }
-                    guard let image = decodedImage else { return }
-                    await MainActor.run { self.imageView.image = image }
-                } catch {
-                    // Swallow cancellation and network errors silently for now
-                }
-            }
-        }
-    }
-    
     private let gradientLayer = CAGradientLayer()
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView(image: nil)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = .init(systemName: "photo")
-        imageView.image = .init(systemName: "photo")
-        imageView.tintColor = .secondaryLabel
-        imageView.backgroundColor = .clear
-        imageView.clipsToBounds = true
-        return imageView
+    private let overlayView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let asyncImage: UIAsyncImage = {
+        let asyncImage = UIAsyncImage()
+        asyncImage.translatesAutoresizingMaskIntoConstraints = false
+        asyncImage.imageView.contentMode = .scaleAspectFill
+        asyncImage.clipsToBounds = true
+        return asyncImage
     }()
     
     private let contentStack: UIStackView = {
@@ -105,11 +83,10 @@ class BannerViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        gradientLayer.frame = imageView.bounds
+        gradientLayer.frame = overlayView.bounds
     }
     
     override func prepareForReuse() {
-        imageView.image = nil
         titleView.text = ""
         genresView.text = ""
         releaseYearView.text = ""
@@ -120,7 +97,7 @@ class BannerViewCell: UICollectionViewCell {
     }
     
     func configure(imageUrl: String, title: String, genres: [String], releaseYear: String, ageIndication: AgeIndicationView) {
-        self.imageUrl = imageUrl
+        if let url = URL(string: imageUrl) { asyncImage.url = url }
         
         titleView.text = title
         
@@ -132,8 +109,9 @@ class BannerViewCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        addSubview(imageView)
+        addSubview(asyncImage)
         addSubview(contentStack)
+        asyncImage.addSubview(overlayView)
         contentStack.addArrangedSubview(titleView)
         contentStack.addArrangedSubview(genresView)
         contentStack.addArrangedSubview(releaseYearAndAgeIndicationStack)
@@ -142,10 +120,16 @@ class BannerViewCell: UICollectionViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            asyncImage.topAnchor.constraint(equalTo: topAnchor),
+            asyncImage.leadingAnchor.constraint(equalTo: leadingAnchor),
+            asyncImage.trailingAnchor.constraint(equalTo: trailingAnchor),
+            asyncImage.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+        NSLayoutConstraint.activate([
+            overlayView.topAnchor.constraint(equalTo: asyncImage.topAnchor),
+            overlayView.leadingAnchor.constraint(equalTo: asyncImage.leadingAnchor),
+            overlayView.trailingAnchor.constraint(equalTo: asyncImage.trailingAnchor),
+            overlayView.bottomAnchor.constraint(equalTo: asyncImage.bottomAnchor),
         ])
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
@@ -163,7 +147,7 @@ class BannerViewCell: UICollectionViewCell {
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
         
-        imageView.layer.insertSublayer(gradientLayer, at: 0)
+        overlayView.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
 

@@ -34,11 +34,11 @@ class BannerCarouselView : UIView {
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = true
         view.backgroundColor = .clear
-        view.clipsToBounds = true
         view.isPagingEnabled = false
         view.contentInsetAdjustmentBehavior = .never
         view.decelerationRate = .fast
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.delegate = self
         view.register(BannerViewCell.self, forCellWithReuseIdentifier: BannerViewCell.identifier)
         return view
     }()
