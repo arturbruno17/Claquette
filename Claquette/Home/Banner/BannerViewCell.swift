@@ -93,13 +93,9 @@ class BannerViewCell: UICollectionViewCell {
         titleView.text = ""
         genresView.text = ""
         releaseYearView.text = ""
-
-        let oldView = releaseYearAndAgeIndicationStack.arrangedSubviews[1]
-        releaseYearAndAgeIndicationStack.removeArrangedSubview(oldView)
-        oldView.removeFromSuperview()
     }
     
-    func configure(imageUrl: String, title: String, genres: [String], releaseYear: String, ageIndication: AgeIndicationView) {
+    func configure(imageUrl: String, title: String, genres: [String], releaseYear: String) {
         if let url = URL(string: imageUrl) { asyncImage.url = url }
         
         titleView.text = title
@@ -108,7 +104,6 @@ class BannerViewCell: UICollectionViewCell {
         genresView.text = genresToDisplay.joined(separator: ", ")
         
         releaseYearView.text = releaseYear
-        releaseYearAndAgeIndicationStack.addArrangedSubview(ageIndication)
     }
     
     private func setupViews() {

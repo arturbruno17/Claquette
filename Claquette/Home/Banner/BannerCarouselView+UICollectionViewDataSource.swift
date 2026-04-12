@@ -25,8 +25,7 @@ extension BannerCarouselView : UICollectionViewDataSource {
             imageUrl: imdbTitle.primaryImage?.url ?? "",
             title: imdbTitle.primaryTitle ?? "",
             genres: imdbTitle.genres ?? [],
-            releaseYear: imdbTitle.startYear?.description ?? "",
-            ageIndication: .free
+            releaseYear: imdbTitle.startYear?.description ?? ""
         )
         return cell
     }
