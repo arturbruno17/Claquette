@@ -50,8 +50,7 @@ class BannerCarouselView : UIView {
         return pageControl
     }()
     
-    init(titles: [IMDbTitle] = []) {
-        self.titles = titles
+    init() {
         super.init(frame: .zero)
         setupCollectionView()
         setupConstraints()

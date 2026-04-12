@@ -34,6 +34,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource {
         return collectionView
     }()
     
+    private let errorView: HomeErrorView = {
+        let errorView = HomeErrorView()
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorView.isHidden = true
+        return errorView
+    }()
+    
     init(homeViewModel: HomeViewModel = .init()) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
@@ -48,19 +55,32 @@ class HomeViewController: UIViewController, UICollectionViewDataSource {
         
         view.addSubview(carouselView)
         view.addSubview(otherTitlesCollectionView)
+        view.addSubview(errorView)
         
         setupConstraints()
         setupObservers()
         
         homeViewModel.getTitles()
+        errorView.tryAgainButton.addTarget(homeViewModel, action: #selector(homeViewModel.getTitles), for: .touchUpInside)
     }
     
     func setupObservers() {
         withObservationTracking({ @MainActor in
             switch (homeViewModel.homeUiState) {
             case .success(let imdbBannerTitles, _):
+                errorView.isHidden = true
+                
+                carouselView.isHidden = false
+                otherTitlesCollectionView.isHidden = false
+                
                 carouselView.titles = imdbBannerTitles
                 otherTitlesCollectionView.reloadData()
+                break
+            case .error(_):
+                carouselView.isHidden = true
+                otherTitlesCollectionView.isHidden = true
+                
+                errorView.isHidden = false
                 break
             default:
                 break
@@ -84,6 +104,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource {
             otherTitlesCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             otherTitlesCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             otherTitlesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            errorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     

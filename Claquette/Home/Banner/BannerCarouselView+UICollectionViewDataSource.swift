@@ -14,8 +14,10 @@ extension BannerCarouselView : UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BannerViewCell.identifier, for: indexPath)
-                as? BannerViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: BannerViewCell.identifier,
+            for: indexPath
+        ) as? BannerViewCell else {
             fatalError("dequeueReusableSupplementaryView(identifier:indexPath) must return a BannerViewCell instance")
         }
         let imdbTitle = titles[indexPath.row]

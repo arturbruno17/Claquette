@@ -19,7 +19,7 @@ class HomeViewModel {
         self.titlesRepository = titlesRepository
     }
     
-    func getTitles() {
+    @objc func getTitles() {
         Task {
             do {
                 let response = try await titlesRepository.listTitles()

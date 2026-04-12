@@ -45,8 +45,8 @@
 		5F66F1662F7E0BFF0072B527 = {
 			isa = PBXGroup;
 			children = (
-				5F66F1712F7E0BFF0072B527 /* Claquette */,
 				5F66F1702F7E0BFF0072B527 /* Products */,
+				5F66F1712F7E0BFF0072B527 /* Claquette */,
 			);
 			sourceTree = "<group>";
 		};
