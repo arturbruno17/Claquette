@@ -83,7 +83,10 @@ class BannerViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         gradientLayer.frame = overlayView.bounds
+        CATransaction.commit()
     }
     
     override func prepareForReuse() {
