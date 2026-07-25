@@ -34,8 +34,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource {
         return collectionView
     }()
     
-    private let errorView: HomeErrorView = {
-        let errorView = HomeErrorView()
+    private let errorView: UIErrorView = {
+        let errorView = UIErrorView()
         errorView.translatesAutoresizingMaskIntoConstraints = false
         errorView.isHidden = true
         return errorView

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeErrorView : UIView {
+class UIErrorView : UIView {
     
     private let stackView: UIStackView = {
         let stack = UIStackView()

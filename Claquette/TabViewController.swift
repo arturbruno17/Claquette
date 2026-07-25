@@ -19,7 +19,7 @@ class TabViewController: UITabBarController {
             selectedImage: nil
         )
 
-        let searchVC = UIViewController()
+        let searchVC = SearchViewController()
         searchVC.tabBarItem = UITabBarItem(
             title: "Search",
             image: .init(systemName: "magnifyingglass"),
